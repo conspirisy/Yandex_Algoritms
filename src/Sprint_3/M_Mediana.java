@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class M_Mediana {
@@ -14,22 +13,23 @@ public class M_Mediana {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             int n = Integer.parseInt(reader.readLine());
             int m = Integer.parseInt(reader.readLine());
-            int[] north = Arrays.stream(reader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            int[] south = Arrays.stream(reader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            int[] arr = merge(north, south);
-            double result = arr.length % 2 == 1 ? arr[arr.length/2] : (double)(arr[arr.length/2 - 1] + arr[arr.length/2])/2;
+            String[] north = reader.readLine().split(" ");
+            String[] south = reader.readLine().split(" ");
+            String[] arr = merge(north, south);
+            double result = arr.length % 2 == 1 ? Integer.parseInt(arr[arr.length/2])
+                    : (double)(Integer.parseInt(arr[arr.length/2 - 1]) + Integer.parseInt(arr[arr.length/2]))/2;
             NumberFormat nf = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.US));
             System.out.println(nf.format(result));
         }
     }
 
-    public static int[] merge(int[] left, int[] right) {
+    public static String[] merge(String[] left, String[] right) {
         int l = 0;
         int r = 0;
         int k = 0;
-        int[] arr = new int[left.length + right.length];
+        String[] arr = new String[left.length + right.length];
         while (l < left.length && r < right.length) {
-            if (left[l] <= right[r]) {
+            if (left[l].compareTo(right[r]) <= 0) {
                 arr[k] = left[l];
                 l++;
             } else {

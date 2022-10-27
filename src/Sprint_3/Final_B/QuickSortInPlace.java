@@ -28,12 +28,12 @@ import java.io.InputStreamReader;
  * */
 public class QuickSortInPlace {
 
-    static class Node {
+    static class Participant {
         String name;
         int completedTasks;
         int penalty;
 
-        Node(String name, int completedTasks, int penalty) {
+        Participant(String name, int completedTasks, int penalty) {
             this.name = name;
             this.completedTasks = completedTasks;
             this.penalty = penalty;
@@ -42,11 +42,11 @@ public class QuickSortInPlace {
         public String toString() {
             return name;
         }
-        int compare(Node node) {
-            if (completedTasks - node.completedTasks != 0) {
-                return completedTasks - node.completedTasks;
-            } else if (node.penalty - penalty != 0) {
-                return node.penalty - penalty;
+        int compare(Participant node) {
+            if (completedTasks != node.completedTasks) {
+                return Integer.compare(completedTasks, node.completedTasks);
+            } else if (node.penalty != penalty) {
+                return Integer.compare(node.penalty, penalty);
             } else {
                 return node.name.compareTo(name);
             }
@@ -56,10 +56,10 @@ public class QuickSortInPlace {
     public static void main(String[] args) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             int n = Integer.parseInt(reader.readLine());
-            Node[] arr = new Node[n];
+            Participant[] arr = new Participant[n];
             for (int i = 0; i < n; i++) {
                 String[] input = reader.readLine().split(" ");
-                arr[i] = new Node(input[0], Integer.parseInt(input[1]), Integer.parseInt(input[2]));
+                arr[i] = new Participant(input[0], Integer.parseInt(input[1]), Integer.parseInt(input[2]));
             }
             quickSort(arr, 0, arr.length - 1);
             for (int i = 0; i < n; i++) {
@@ -68,10 +68,10 @@ public class QuickSortInPlace {
         }
     }
 
-    public static void quickSort(Node[] arr, int left, int right) {
-        Node temp;
+    public static void quickSort(Participant[] arr, int left, int right) {
+        Participant temp;
         int i = left, j = right;
-        Node pivot = arr[left + (right - left) / 2];
+        Participant pivot = arr[left + (right - left) / 2];
         while (i <= j) {
             while (arr[i].compare(pivot) > 0) {
                 i++;
