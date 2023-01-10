@@ -1,4 +1,4 @@
-package Sprint_5.Final_B;
+package Sprint_5.Final.Final_B;
 
 /*
  * https://contest.yandex.ru/contest/24810/run-report/80435753/
