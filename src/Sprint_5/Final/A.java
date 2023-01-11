@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * В освободившуюся ячейку нужно перенести элемент из последней занятой ячейки в массиве;
  * Затем нужно привести дерево к упорядоченному виду с помощью просеивания перенесенного элемента вниз.
  * При заполнении массива, элемент добавляется в последнюю свободную ячейку, а потом просеивается вверх.
+ * Использую ArrayList, так как нужно удалять из массива последний элемент и работать с size массива, посчитал что так будет проще.
  * -- ДОКАЗАТЕЛЬСТВО КОРРЕКТНОСТИ --
  * индекс родителя узла i равен i/2
  * индекс левого потомка узла i равен 2 * i
@@ -25,8 +26,9 @@ import java.util.ArrayList;
  * -- ВРЕМЕННАЯ СЛОЖНОСТЬ --
  * Так как при вставке мы на каждом уровне проводим только одно сравнение элемента, а куча у нас имеет высоту log2N, то вставка происходит за O(logN).
  * Так как при удалении мы на каждом уровне дерева проводим не более двух сравнений элемента, а куча у нас имеет высоту log2N, то удаление происходит за O(logN).
+ * Сама пирамидальная сортировка имеет сложность O(nlogn). Нужно создать кучу, затем вставить n элементов в кучу со сложностью O(nlogn), затем  извлекаем nn элементов, сложность этой операции также не больше, чем O(nlogn)
  *  -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
- * Пространственная сложность O(1). Понадобится хранить одну кучу из элементов, и один отсортированный массив.
+ * Пространственная сложность O(n). Понадобится хранить одну кучу из элементов, и один отсортированный массив.
  * */
 public class A {
 
@@ -94,6 +96,12 @@ public class A {
         }
     }
 
+    public static void swap(ArrayList<Node> heap, int index, int indexLargest) {
+        Node temp = heap.get(index);
+        heap.set(index, heap.get(indexLargest));
+        heap.set(indexLargest, temp);
+    }
+
     public static StringBuilder heapSort(String[] array) {
         ArrayList<Node> heap = new ArrayList<>(array.length);
         heap.add(null);
@@ -131,9 +139,7 @@ public class A {
             indexLargest = left;
         }
         if (heap.get(index).compareTo(heap.get(indexLargest)) < 0) {
-            Node temp = heap.get(index);
-            heap.set(index, heap.get(indexLargest));
-            heap.set(indexLargest, temp);
+            swap(heap, index, indexLargest);
             siftDown(heap, indexLargest);
         }
     }
@@ -148,9 +154,7 @@ public class A {
         if (index == 1) return;
         int parentIndex = index / 2;
         if (heap.get(parentIndex).compareTo(heap.get(index)) < 0) {
-            Node temp = heap.get(index);
-            heap.set(index, heap.get(parentIndex));
-            heap.set(parentIndex, temp);
+            swap(heap, index, parentIndex);
             siftUp(heap, parentIndex);
         }
     }
