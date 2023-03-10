@@ -3,7 +3,6 @@ package Sprint_8;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class B {
 
@@ -15,47 +14,37 @@ public class B {
             if (Math.abs(s.length() - t.length()) >= 2) {
                 System.out.println("FAIL");
             } else {
-                System.out.println(getDistLevenstain(s, t) < 2 ? "OK" : "FAIL");
+                System.out.println(oneEdit(s, t) ? "OK" : "FAIL");
             }
 
         }
     }
 
-    public static int getDistLevenstain(String str1, String str2) {
-        int countColumns = Math.min(str1.length(), str2.length());
-        int countLines = Math.max(str1.length(), str2.length());
-        String shortest;
-        String longest;
+    public static boolean oneEdit(String str1, String str2) {
+        if (Math.abs(str1.length() - str2.length()) > 1) {
+            return false;
+        }
+
         if (str1.length() > str2.length()) {
-            shortest = str2;
-            longest = str1;
-        } else {
-            shortest = str1;
-            longest = str2;
+            return oneEdit(str2, str1);
         }
-
-        int[] currentRow = new int[countColumns + 1];
-        int[] previousRow;
-        for (int i = 0; i < currentRow.length; i++) {
-            currentRow[i] = i;
-        }
-
-        for (int i = 1; i <= countLines; i++) {
-            previousRow = Arrays.copyOf(currentRow, currentRow.length);
-            currentRow = new int[countColumns + 1];
-            currentRow[0] = i;
-
-            for (int j = 1; j <= countColumns; j++) {
-                int add = previousRow[j] + 1;
-                int delete = currentRow[j - 1] + 1;
-                int change = previousRow[j - 1];
-                if (shortest.charAt(j - 1) != longest.charAt(i - 1)) {
-                    change += 1;
+        int lhsPos = 0;
+        int rhsPos = 0;
+        boolean oneEdit = false;
+        while (lhsPos < str1.length() && rhsPos < str2.length()) {
+            if (str1.charAt(lhsPos) != str2.charAt(rhsPos)) {
+                if (oneEdit) {
+                    return false;
                 }
-                currentRow[j] = Math.min(Math.min(add, delete), change);
+                oneEdit = true;
+                if (str1.length() == str2.length()) {
+                    lhsPos++;
+                }
+            } else {
+                lhsPos++;
             }
+            rhsPos++;
         }
-
-        return currentRow[countColumns];
+        return true;
     }
 }
